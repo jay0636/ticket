@@ -1,0 +1,74 @@
+{% extends 'vip/layout/layout.html' %}
+{% block vip_head%}
+<style>
+    table{
+        border: 0px;
+    }
+    td{
+        border: 0px;
+    }
+</style>
+{%endblock%}
+
+{% block vip_content%}
+
+<div align="center" style="width: 70%;">
+
+    <div style="margin-bottom: 2em; background-color:rgb(231, 231, 231); padding: 1em;">
+        회원님의 등급은 {{member.vip.vip_grade}}입니다.<br>
+        자세한 내용을 보시고 싶다면? <a href="https://www.payco.com/point/reward.nhn">내 등급정보 자세히 보기</a>
+    </div>
+
+    <table>
+        <tr>
+            {% for i in list %}
+            <td><a href="/perform/product/?pf_no={{i.perform_no}}">
+                <img style="width: 200px;" src="{{i.poster}}">
+            </a></td>
+            {% endfor %}
+        </tr>
+        <tr>
+            {% for i in list %}
+            <td style="font-size: x-small;"><a href="/perform/product/?pf_no={{i.perform_no}}">
+                {{vip.benefit}} | {{i.pf_name}}
+            </a></td>
+            {% endfor %}
+        </tr>
+    </table>
+</div>
+
+{%endblock%}
+
+
+
+
+class Perform(models.Model):
+    perform_no = models.BigAutoField(primary_key=True, blank=False, null=False, verbose_name="공연번호")                    
+    place_no = models.ForeignKey(Place, on_delete=models.CASCADE, verbose_name="공연장소")              
+    poster = models.FileField(null=False, verbose_name="공연포스터")                                                           
+    poster2 = models.FileField(null=True, verbose_name="공연 메인 홈 포스터")
+    pf_name = models.CharField(max_length=300, blank=False, null=False, verbose_name="공연이름")                              
+    genre_no = models.ForeignKey(Genre, on_delete=models.CASCADE, verbose_name="공연장르")                                   
+    promo= models.TextField (blank=True, null=True, verbose_name="프로모션 번호")                                                                    
+    kind_no = models.ForeignKey(Kind, on_delete=models.CASCADE, verbose_name="구분번호")                                     
+    pf_ticketdate = models.DateTimeField(null=False, verbose_name="티켓오픈날짜")                                                   
+    pf_startdate = models.DateField(null=False, verbose_name="공연시작일")                                                     
+    pf_enddate = models.DateField(null=False, verbose_name="공연끝나는날")                                                       
+    pf_rating = models.CharField(max_length=200, blank=True, null=True, verbose_name="관람등급")    
+    pf_time = models.CharField(max_length=30, blank=True, null=True, verbose_name="관람시간")                 
+    pftime_info = models.TextField(blank=True, null=True, verbose_name="공연시간정보")                           
+    notice = models.TextField(blank=False, null=False, verbose_name="공지사항")                              
+    saleimg_info = models.FileField(null=True, verbose_name="공연할인정보(이미지)")
+    saletxt_info = models.TextField(null=True, blank=True, verbose_name="공연할인정보(텍스트)")                                                         
+    pf_info = models.FileField(null=False, verbose_name="작품상세정보")
+    host = models.CharField(max_length=400, blank=False, null=False, verbose_name="주최 및 기획")
+    inquiry = models.CharField(max_length=50, blank=False, null=False, verbose_name="고객문의")
+    main_actor = models.CharField(max_length=500, blank=True, null=True, verbose_name="주연")
+    booking_fee = models.BigIntegerField(blank=True, null=True, verbose_name="예매수수료")
+    rw_no = models.ForeignKey(RecieveWay, on_delete=models.CASCADE, verbose_name="배송방법")
+    exp_date = models.CharField(max_length=200, blank=False, null=False, verbose_name="유효기간")
+    # ct_policy = models.CharField(max_length=500, blank=False, null=False, verbose_name="예매취소조건")
+    # ct_info = models.TextField(blank=False, null=False, verbose_name="취소환불방법")          #html, layout처리
+    total_seat = models.BigIntegerField(blank=True, null=True, verbose_name="총 좌석수")
+    uploadDate = models.DateTimeField(auto_now_add=True, null=False, verbose_name="공연등록날짜")
+    character = models.CharField(max_length=300, blank=False, null=False, verbose_name="특징")                              
